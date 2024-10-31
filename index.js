@@ -7,6 +7,7 @@ app.use(express.json());
 // example of GET API
 app.get('/api/movies', (req, res) => {
     // write sql query to get all movies and return in response
+    console.log('TODO: Get all movies');
 });
 
 // Start the server
