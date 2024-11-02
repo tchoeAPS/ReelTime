@@ -1,5 +1,6 @@
 import express from 'express';
 import { getAllMovies, getMoviesCount, insertMovie } from './sql.js';
+import { sortResults } from './helpers.js';
 
 const router = express.Router();
 
@@ -8,7 +9,9 @@ router.get('/movies', async (req, res) => {
   const connection = req.db;
   try {
     const { sortOn, sortOrder } = req.query;
-    const [movies] = await connection.query(getAllMovies(sortOn, sortOrder));
+    const [movies] = await connection.query(
+      sortResults(getAllMovies, sortOn, sortOrder)
+    );
     return res.json(movies);
   } catch (error) {
     console.error('Error fetching movies:', error);

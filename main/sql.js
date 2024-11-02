@@ -1,12 +1,4 @@
-import { sortResults } from './helpers.js';
-
-export function getAllMovies(sortOn, sortOrder) {
-  const sql = `SELECT * FROM movies`;
-  if (sortOn && sortOrder) {
-    return sql + sortResults(sortOn, sortOrder);
-  }
-  return sql;
-}
+export const getAllMovies = `SELECT * FROM movies`;
 
 export const getMoviesCount = `SELECT COUNT(*) as count FROM movies`;
 
