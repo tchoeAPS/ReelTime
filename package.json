@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main/index.js",
-    "dev": "nodemon main/index.js"
+    "start": "node main/app.js",
+    "dev": "nodemon main/app.js"
   },
   "author": "",
   "license": "ISC",
