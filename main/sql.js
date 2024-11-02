@@ -10,27 +10,19 @@ export function getAllMovies(sortOn, sortOrder) {
 
 export const getMoviesCount = `SELECT COUNT(*) as count FROM movies`;
 
-export function insertMovie(
-  movie_id,
-  movie_title,
-  description,
-  image_url,
-  duration,
-  view_rating
-) {
-  return `INSERT INTO movies (
-        movie_id,
-        movie_title,
-        description,
-        image_url,
-        duration,
-        view_rating
-    ) VALUES (
-        ${movie_id},
-        '${movie_title}',
-        '${description}',
-        '${image_url}',
-        ${duration},
-        '${view_rating}'
-    )`;
-}
+export const insertMovie = `
+  INSERT INTO movies (
+    movie_id,
+    movie_title,
+    description,
+    image_url,
+    duration,
+    view_rating
+  ) VALUES (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?
+  )`;

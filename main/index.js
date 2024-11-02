@@ -36,16 +36,14 @@ async function startServer() {
 
       const [movie_id] = await connection.query(getMoviesCount);
       // Insert the movie into the database
-      await connection.query(
-        insertMovie(
-          movie_id[0].count + 1,
-          movie_title,
-          description,
-          image_url,
-          duration,
-          view_rating
-        )
-      );
+      await connection.query(insertMovie, [
+        movie_id[0].count + 1,
+        movie_title,
+        description,
+        image_url,
+        duration,
+        view_rating,
+      ]);
       return res.status(201).json({ message: 'Movie added successfully' });
     } catch (error) {
       console.error('Error adding movie:', error);
