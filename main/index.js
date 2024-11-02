@@ -20,6 +20,7 @@ async function dbMiddleware(req, res, next) {
   }
 }
 
+app.use(express.json());
 app.use(dbMiddleware);
 
 async function startServer() {
