@@ -5,19 +5,27 @@ import { getAllMovies, getMoviesCount, insertMovie } from './sql.js';
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+async function dbMiddleware(req, res, next) {
+  try {
+    req.db = await mysql.createConnection({
+      host: 'localhost',
+      user: 'reeltime',
+      password: 'reeltimeCSC540',
+      database: 'reeltime',
+    });
+    next();
+  } catch (error) {
+    console.error('Database connection error:', error);
+    res.status(500).json({ error: 'Database connection error' });
+  }
+}
+
+app.use(dbMiddleware);
 
 async function startServer() {
-  // Create the connection to database
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'reeltime',
-    password: 'reeltimeCSC540',
-    database: 'reeltime',
-  });
-
   // example of GET API
   app.get('/api/movies', async (req, res) => {
+    const connection = req.db;
     try {
       const { sortOn, sortOrder } = req.query;
       const [movies] = await connection.query(getAllMovies(sortOn, sortOrder));
@@ -30,6 +38,7 @@ async function startServer() {
 
   // example of POST API
   app.post('/api/create-movie', async (req, res) => {
+    const connection = req.db;
     try {
       const { movie_title, description, image_url, duration, view_rating } =
         req.body;
