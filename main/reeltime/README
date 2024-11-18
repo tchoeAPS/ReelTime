@@ -1,4 +1,4 @@
-download files 
+download reeltime.zip to retain file structure
 go to directory via Terminal 
 run node app_reeltime.js
 go to web browser: http://localhost/reeltime.html
