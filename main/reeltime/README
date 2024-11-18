@@ -1,4 +1,5 @@
 download reeltime.zip to retain file structure
+run the sql file
 go to directory via Terminal 
 run node app_reeltime.js
 go to web browser: http://localhost/reeltime.html
