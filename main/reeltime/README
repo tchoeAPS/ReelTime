@@ -1,9 +1,0 @@
-download reeltime.zip to retain file structure
-run the sql file
-go to directory via Terminal 
-run node app_reeltime.js
-go to web browser: http://localhost/reeltime.html
-
-Go to My Cinema (Admin) then LaunchPad > Click Showtime Manager > Test by selecting movies
-
-More screens will be added
