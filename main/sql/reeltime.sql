@@ -235,6 +235,27 @@ VALUES
 	(143, 6, 4, '2024-11-29 16:00:00', '2024-11-29 17:40:00', 60),
 	(144, 6, 4, '2024-11-29 20:00:00', '2024-11-29 21:40:00', 55);
 
+-- Table: employees
+DROP TABLE IF EXISTS employees;
+CREATE TABLE employees (
+    employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    emp_password VARCHAR(255) NOT NULL,
+    emp_email VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    admin_flag BOOLEAN NOT NULL,
+    job_title VARCHAR(255) NOT NULL,
+    cinema_id INT, 
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+INSERT INTO employees (username, emp_password, emp_email, created_at, admin_flag, job_title, cinema_id)
+VALUES
+	('maria', 'password', 'maria@email.com', '2024-11-22', TRUE, 'manager', 1),
+    ('kate', 'password', 'kate@email.com', '2024-11-22', FALSE, 'employee', 1),
+    ('tiffany', 'password', 'tiffany@email.com', '2024-11-22', TRUE, 'manager', 2),
+    ('jazz','password', 'jazz@email.com', '2024-11-22', FALSE, 'employee', 2);
+
 
 -- Temporarily disable safe mode
 SET SQL_SAFE_UPDATES = 0;

@@ -80,3 +80,5 @@ export const selectSeat = `SELECT seat_id FROM seats WHERE seat_id = ? and theat
 export const reserveSeat = `UPDATE seats SET seat_available = false WHERE seat_id = ? and theater_id = ?`;
 
 export const updateSeatCleanedStatus = `UPDATE seats SET cleaned = ? WHERE seat_id = ? and theater_id = ?`;
+
+export const employees = `SELECT employee_id, job_title, username, emp_email FROM employees`;
