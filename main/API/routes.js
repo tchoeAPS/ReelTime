@@ -83,7 +83,8 @@ router.get('/getShowtimesByMovie', async (req, res) => {
   try {
     const { movieId, sortOn, sortOrder } = req.query;
     const [showtimes] = await connection.query(
-      sortResults(getShowtimesByMovie, sortOn, sortOrder)[movieId]
+      sortResults(getShowtimesByMovie, sortOn, sortOrder),
+      [movieId]
     );
     return res.json(showtimes);
   } catch (error) {
@@ -97,7 +98,7 @@ router.get('/getShowtimeById', async (req, res) => {
   try {
     const { showtimeId } = req.query;
     const [showtime] = await connection.query(getShowtimeById, [showtimeId]);
-    return res.json(showtime);
+    return res.json(showtime); // Respond with the showtime details
   } catch (error) {
     console.error('Error fetching showtime:', error);
     res.status(500).json({ error: error.message });
@@ -112,19 +113,17 @@ router.post('/updateTicketsAvailable', async (req, res) => {
       tickets_available,
       showtime_id,
     ]);
-    return res.status(201).json({ message: 'Showtime added successfully' });
+    return res.status(201).json({ message: 'Tickets updated successfully' });
   } catch (error) {
-    console.error('Error adding showtime:', error);
+    console.error('Error updating tickets:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-router.get('getTheaters', async (req, res) => {
+router.get('/getTheaters', async (req, res) => {
   const connection = req.db;
   try {
-    const [theaters, sortOn, sortOrder] = await connection.query(
-      sortResults(getTheaters, sortOn, sortOrder)
-    );
+    const [theaters] = await connection.query(getTheaters);
     return res.json(theaters);
   } catch (error) {
     console.error('Error fetching theaters:', error);
