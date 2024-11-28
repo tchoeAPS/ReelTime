@@ -9,6 +9,10 @@ import {
   updateTicketsAvailable,
   getTheaters,
   addShowtime,
+  reserveSeat,
+  updateSeatCleanedStatus,
+  employees,
+  newEmployee,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
@@ -146,6 +150,88 @@ router.post('/addShowtime', async (req, res) => {
     return res.status(201).json({ message: 'Showtime added successfully' });
   } catch (error) {
     console.error('Error adding showtime:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/selectSeat', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { seat_id, theater_id } = req.query;
+    const [seat] = await connection.query(updateTicketsAvailable, [
+      seat_id,
+      theater_id,
+    ]);
+    return res.json(seat);
+  } catch (error) {
+    console.error('Error selecting ticket:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/reserveSeat', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { seat_id, theater_id } = req.body;
+    await connection.query(reserveSeat, [seat_id, theater_id]);
+    return res.status(201).json({ message: 'Seat reserved successfully' });
+  } catch (error) {
+    console.error('Error reserving seat:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/updateSeatCleanedStatus', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { cleaned, seat_id, theater_id } = req.body;
+    await connection.query(updateSeatCleanedStatus, [
+      cleaned,
+      seat_id,
+      theater_id,
+    ]);
+    return res.status(201).json({ message: 'Seat cleaned status updated' });
+  } catch (error) {
+    console.error('Error updating seat status:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/employees', async (req, res) => {
+  const connection = req.db;
+  try {
+    const [employees] = await connection.query(employees);
+    return res.json(employees);
+  } catch (error) {
+    console.error('Error fetching employees:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/newEmployee', async (req, res) => {
+  const connection = req.db;
+  try {
+    const {
+      username,
+      emp_password,
+      emp_email,
+      created_at,
+      admin_flag,
+      job_title,
+      cinema_id,
+    } = req.body;
+    await connection.query(newEmployee, [
+      username,
+      emp_password,
+      emp_email,
+      created_at,
+      admin_flag,
+      job_title,
+      cinema_id,
+    ]);
+    return res.status(201).json({ message: 'Employee added successfully' });
+  } catch (error) {
+    console.error('Error adding employee:', error);
     res.status(500).json({ error: error.message });
   }
 });

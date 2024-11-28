@@ -67,18 +67,49 @@ JOIN theaters t ON s.theater_id = t.theater_id
 WHERE s.showtime_id = ?
 `;
 
-export const updateTicketsAvailable = `UPDATE showtimes SET tickets_available = ? WHERE showtime_id = ?`;
+export const updateTicketsAvailable = `
+UPDATE 
+  showtimes 
+SET tickets_available = ? 
+WHERE showtime_id = ?`;
 
-export const getTheaters = `SELECT theater_id, theater_name, cinema_id, capacity, cleaned, 3D_Flag FROM theaters`;
+export const getTheaters = `
+SELECT 
+  theater_id, theater_name, cinema_id, capacity, cleaned, 3D_Flag 
+FROM theaters`;
 
 export const addShowtime = `
-INSERT INTO showtimes (start_time, end_time, tickets_available, theater_id, movie_id) 
-         VALUES (?, ?, ?, ?, ?)`;
+INSERT INTO showtimes 
+  (start_time, end_time, tickets_available, theater_id, movie_id) 
+VALUES 
+  (?, ?, ?, ?, ?)`;
 
-export const selectSeat = `SELECT seat_id FROM seats WHERE seat_id = ? and theater_id = ?`;
+export const selectSeat = `
+SELECT 
+  seat_id 
+FROM seats 
+WHERE 
+  seat_id = ? and theater_id = ?`;
 
-export const reserveSeat = `UPDATE seats SET seat_available = false WHERE seat_id = ? and theater_id = ?`;
+export const reserveSeat = `
+UPDATE 
+  seats 
+SET seat_available = false 
+WHERE seat_id = ? and theater_id = ?`;
 
-export const updateSeatCleanedStatus = `UPDATE seats SET cleaned = ? WHERE seat_id = ? and theater_id = ?`;
+export const updateSeatCleanedStatus = `
+UPDATE 
+  seats 
+SET cleaned = ? 
+WHERE seat_id = ? and theater_id = ?`;
 
-export const employees = `SELECT employee_id, job_title, username, emp_email FROM employees`;
+export const employees = `
+SELECT 
+  employee_id, job_title, username, emp_email 
+FROM employees`;
+
+export const newEmployee = `
+INSERT INTO employees 
+  (username, emp_password, emp_email, created_at, admin_flag, job_title, cinema_id) 
+VALUES 
+  (?, ?, ?, ?, ?, ?, ?)`;

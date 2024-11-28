@@ -256,6 +256,17 @@ VALUES
     ('tiffany', 'password', 'tiffany@email.com', '2024-11-22', TRUE, 'manager', 2),
     ('jazz','password', 'jazz@email.com', '2024-11-22', FALSE, 'employee', 2);
 
+DROP TABLE IF EXISTS seats;
+CREATE TABLE seats (
+    seat_id INT AUTO_INCREMENT PRIMARY KEY,
+    seat_row INT NOT NULL,
+    seat_column INT NOT NULL,
+    seat_number VARCHAR(50) NOT NULL,
+    seat_available BOOLEAN NOT NULL,
+    cleaned BOOLEAN NOT NULL,
+    theater_id INT, 
+    FOREIGN KEY (theater_id) REFERENCES theaters(theater_id) ON DELETE CASCADE
+);
 
 -- Temporarily disable safe mode
 SET SQL_SAFE_UPDATES = 0;
