@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReelTime Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: #333;
+            color: white;
+        }
+        .header {
+            background-color: #4a678e;
+            padding: 20px 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #F5C451;
+        }
+        .header-buttons {
+            margin-top: 15px;
+        }
+        .header-buttons a {
+            text-decoration: none;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #285b86;
+            color: white;
+            border-radius: 5px;
+        }
+        .header-buttons a:hover {
+            background-color: #1a4566;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin-top: 120px; 
+        }
+        .login-box {
+            display: flex;
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            width: 90%; /* Adjusted for responsiveness */
+            max-width: 1200px; /* Maximum size */
+        }
+        .login-image {
+            flex: 1;
+            background-image: url('images/YOURREELS.png');
+            background-size: contain; 
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .login-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: black;
+            padding: 40px;
+        }
+        .login-form h1 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .login-form label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a678e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #285b86;
+        }
+        .login-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ReelTime Login</h1>
+        <div class="header-buttons">
+            <a href="reeltime.html">Back to Homepage</a>
+            <a href="cinemaadminlaunchpad.html">Back to Admin Dashboard</a>
+        </div>
+    </div>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-image"></div>
+            <div class="login-form">
+                <h1>Sign In</h1>
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <button>Sign In</button>
+                <div class="login-footer">© 2024, ReelTime</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
