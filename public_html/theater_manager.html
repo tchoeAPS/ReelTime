@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theater: Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: #333;
+            color: white;
+        }
+        .header {
+            background-color: #4a678e;
+            padding: 20px 10px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #F5C451;
+        }
+        .header-buttons {
+            margin-top: 15px;
+        }
+        .header-buttons a {
+            text-decoration: none;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #285b86;
+            color: white;
+            border-radius: 5px;
+        }
+        .header-buttons a:hover {
+            background-color: #1a4566;
+        }
+        .theater-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .dropdown {
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #444;
+            color: white;
+        }
+        .seating-chart {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .seat {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            height: 40px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .seat.available {
+            background-color: lightgreen;
+        }
+        .seat.reserved {
+            background-color: lightcoral;
+            cursor: not-allowed;
+        }
+        .seat.selected {
+            background-color: #F5C451;
+            color: black;
+        }
+        .selected-seat-details {
+            margin-top: 20px;
+            font-size: 18px;
+            color: white;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .reserve-btn {
+            background-color: #F5C451;
+            color: black;
+        }
+        .reserve-btn:hover {
+            background-color: #D4A33A;
+        }
+        .clean-btn {
+            background-color: #285b86;
+            color: white;
+        }
+        .clean-btn:hover {
+            background-color: #1a4566;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .modal-content {
+            background-color: #444;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            color: white;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-content .save-btn {
+            background-color: #285b86;
+            color: white;
+        }
+        .modal-content .cancel-btn {
+            background-color: #555;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Theater Manager View</h1>
+        <div class="header-buttons">
+            <a href="cinemaadminlaunchpad.html">Back to Admin Dashboard</a>
+            <a href="reeltime.html">Back to Homepage</a>
+        </div>
+    </div>
+    <div class="theater-container">
+        <select class="dropdown" id="theaterDropdown">
+            <option value="1">Theater 1</option>
+            <option value="2">Theater 2</option>
+            <option value="3">Theater 3</option>
+            <option value="4">Theater 4</option>
+        </select>
+        <div class="seating-chart" id="seatingChart">
+        </div>
+        <div class="selected-seat-details" id="selectedSeatDetails">
+            Seat: None | Status: None
+        </div>
+        <div class="buttons">
+            <button class="button clean-btn">Mark as Cleaned</button>
+            <button class="button reserve-btn" id="reserveBtn">Mark as Reserved</button>
+        </div>
+    </div>
+    <div class="modal" id="reservationModal">
+        <div class="modal-content">
+            <h2>Reserve Seat</h2>
+            <label>Date: <input type="date"></label><br><br>
+            <label>Time: <input type="time"></label><br><br>
+            <label>Movie:
+                <select>
+                    <option>Wicked</option>
+                    <option>Beetlejuice 2</option>
+                    <option>Deadpool & Wolverine</option>
+                </select>
+            </label><br><br>
+            <button class="save-btn">Save</button>
+            <button class="cancel-btn" onclick="document.getElementById('reservationModal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+    <script>
+        const reserveBtn = document.getElementById('reserveBtn');
+        const modal = document.getElementById('reservationModal');
+        const seatingChart = document.getElementById('seatingChart');
+        const theaterDropdown = document.getElementById('theaterDropdown');
+        const selectedSeatDetails = document.getElementById('selectedSeatDetails');
+
+        let selectedSeat = null;
+
+        const generateSeats = () => {
+            seatingChart.innerHTML = '';
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+            const columns = 10;
+
+            rows.forEach((row) => {
+                for (let i = 1; i <= columns; i++) {
+                    const seat = document.createElement('div');
+                    seat.className = 'seat available';
+                    seat.innerText = `${row}${i}`;
+                    seatingChart.appendChild(seat);
+
+                    // Handle seat selection
+                    seat.addEventListener('click', () => {
+                        if (seat.classList.contains('reserved')) return;
+
+                        // Deselect previous seat
+                        if (selectedSeat) {
+                            selectedSeat.classList.remove('selected');
+                        }
+
+                        // Select new seat
+                        seat.classList.add('selected');
+                        selectedSeat = seat;
+
+                        // Update seat details
+                        selectedSeatDetails.innerText = `Seat: ${seat.innerText} | Status: Placeholder`;
+                    });
+                }
+            });
+        };
+
+        reserveBtn.addEventListener('click', () => {
+            if (!selectedSeat) {
+                alert('Please select a seat first!');
+                return;
+            }
+            modal.style.display = 'block';
+        });
+
+        theaterDropdown.addEventListener('change', () => {
+            generateSeats();
+        });
+
+        // Initialize seats for default theater
+        generateSeats();
+    </script>
+</body>
+</html>

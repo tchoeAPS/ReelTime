@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Inventory</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        .header {
+            background-color: #4a678e;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #F5C451;
+        }
+
+        .header-buttons {
+            margin-top: 15px;
+        }
+
+        .header-buttons a {
+            text-decoration: none;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #285b86;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .header-buttons a:hover {
+            background-color: #1a4566;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .movie-item {
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 2px solid #F5C451;
+        }
+
+        .movie-item h2 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+
+        .movie-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Movie Inventory</h1>
+        <div class="header-buttons">
+            <a href="cinemaadminlaunchpad.html">Back to Admin Dashboard</a>
+            <a href="reeltime.html">Back to Homepage</a>
+        </div>
+    </div>
+    <div class="movie-grid">
+        <!-- Movie 1 -->
+        <div class="movie-item">
+            <img src="images/wicked.jpg" alt="Wicked">
+            <h2>Wicked</h2>
+            <p>Fantasy Musical | PG</p>
+        </div>
+        <!-- Movie 2 -->
+        <div class="movie-item">
+            <img src="images/beetlejuice.jpg" alt="Beetlejuice">
+            <h2>Beetlejuice 2</h2>
+            <p>Comedy Fantasy | PG-13</p>
+        </div>
+        <!-- Movie 3 -->
+        <div class="movie-item">
+            <img src="images/deadpoolwolverine.jpg" alt="Deadpool & Wolverine">
+            <h2>Deadpool & Wolverine</h2>
+            <p>Action Comedy | R</p>
+        </div>
+        <!-- Movie 4 -->
+        <div class="movie-item">
+            <img src="images/despicableme4.jpg" alt="Despicable Me 4">
+            <h2>Despicable Me 4</h2>
+            <p>Animated Comedy | PG</p>
+        </div>
+        <!-- Movie 5 -->
+        <div class="movie-item">
+            <img src="images/insideout2.jpg" alt="Inside Out 2">
+            <h2>Inside Out 2</h2>
+            <p>Animated Adventure | PG</p>
+        </div>
+        <!-- Movie 6 -->
+        <div class="movie-item">
+            <img src="images/moana2.jpg" alt="Moana 2">
+            <h2>Moana 2</h2>
+            <p>Animated Adventure | PG</p>
+        </div>
+        <!-- Movie 7 -->
+        <div class="movie-item">
+            <img src="images/redone.jpg" alt="Red One">
+            <h2>Red One</h2>
+            <p>Action Comedy | PG-13</p>
+        </div>
+        <!-- Movie 8 -->
+        <div class="movie-item">
+            <img src="images/speaknoevil.jpg" alt="Speak No Evil">
+            <h2>Speak No Evil</h2>
+            <p>Horror | R</p>
+        </div>
+    </div>
+</body>
+</html>
