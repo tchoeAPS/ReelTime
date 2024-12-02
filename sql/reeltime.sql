@@ -3,6 +3,7 @@ CREATE DATABASE ReelTime;
 USE ReelTime;
 
 -- Table: cinemas
+
 DROP TABLE IF EXISTS cinemas;
 CREATE TABLE cinemas (
     cinema_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,11 +15,13 @@ CREATE TABLE cinemas (
 );
 
 -- Insert cinemas data
+
 INSERT INTO cinemas (cinema_name, cinema_address, cinema_city, cinema_state, capacity) VALUES
 ('North Haven Cinema', '123 Main St', 'North Haven', 'CT', 500),
 ('New Haven Cinema', '456 Elm St', 'New Haven', 'CT', 400);
 
 -- Table: theaters
+
 DROP TABLE IF EXISTS theaters;
 CREATE TABLE theaters (
     theater_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,6 +34,7 @@ CREATE TABLE theaters (
 );
 
 -- Insert theaters data
+
 INSERT INTO theaters (theater_name, cinema_id, capacity, cleaned, 3D_Flag) VALUES
 ('Theater 1', 1, 200, TRUE, FALSE),
 ('Theater 2', 1, 300, TRUE, TRUE),
@@ -38,6 +42,7 @@ INSERT INTO theaters (theater_name, cinema_id, capacity, cleaned, 3D_Flag) VALUE
 ('Theater 4', 2, 250, TRUE, TRUE);
 
 -- Table: movies
+
 DROP TABLE IF EXISTS movies;
 CREATE TABLE movies (
     movie_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,6 +56,7 @@ CREATE TABLE movies (
 );
 
 -- Insert movie data
+
 INSERT INTO movies (movie_id, movie_title, description, image_url, duration, view_rating, genre, director) VALUES
 (1, 'Wicked', 'Fantasy musical about the witches of Oz.', 'images/wicked.jpg', 165, 'PG', 'Fantasy Musical', 'Jon M. Chu'),
 (2, 'Beetlejuice 2', 'Comedy sequel about the return of Beetlejuice.', 'images/beetlejuice.jpg', 120, 'PG-13', 'Comedy Fantasy', 'Tim Burton'),
@@ -63,6 +69,7 @@ INSERT INTO movies (movie_id, movie_title, description, image_url, duration, vie
 
 
 -- Table: showtimes
+
 DROP TABLE IF EXISTS showtimes;
 CREATE TABLE showtimes (
     showtime_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,6 +83,7 @@ CREATE TABLE showtimes (
 );
 
 -- Insert showtimes for the week with 3 showtimes per day for each movie
+
 INSERT INTO showtimes (showtime_id, movie_id, theater_id, start_time, end_time, tickets_available)
 VALUES
     -- Wicked (Movie ID: 1)
@@ -234,39 +242,210 @@ VALUES
 	(142, 6, 4, '2024-11-29 12:00:00', '2024-11-29 13:40:00', 65),
 	(143, 6, 4, '2024-11-29 16:00:00', '2024-11-29 17:40:00', 60),
 	(144, 6, 4, '2024-11-29 20:00:00', '2024-11-29 21:40:00', 55);
+    
+-- Table: seats
 
--- Table: employees
-DROP TABLE IF EXISTS employees;
-CREATE TABLE employees (
-    employee_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    emp_password VARCHAR(255) NOT NULL,
-    emp_email VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL,
-    admin_flag BOOLEAN NOT NULL,
-    job_title VARCHAR(255) NOT NULL,
-    cinema_id INT, 
-    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
-);
-
-INSERT INTO employees (username, emp_password, emp_email, created_at, admin_flag, job_title, cinema_id)
-VALUES
-	('maria', 'password', 'maria@email.com', '2024-11-22', TRUE, 'manager', 1),
-    ('kate', 'password', 'kate@email.com', '2024-11-22', FALSE, 'employee', 1),
-    ('tiffany', 'password', 'tiffany@email.com', '2024-11-22', TRUE, 'manager', 2),
-    ('jazz','password', 'jazz@email.com', '2024-11-22', FALSE, 'employee', 2);
-
-DROP TABLE IF EXISTS seats;
 CREATE TABLE seats (
     seat_id INT AUTO_INCREMENT PRIMARY KEY,
-    seat_row INT NOT NULL,
+    seat_row CHAR(1) NOT NULL,
     seat_column INT NOT NULL,
     seat_number VARCHAR(50) NOT NULL,
     seat_available BOOLEAN NOT NULL,
     cleaned BOOLEAN NOT NULL,
-    theater_id INT, 
+    theater_id INT NOT NULL,
     FOREIGN KEY (theater_id) REFERENCES theaters(theater_id) ON DELETE CASCADE
 );
+
+-- Insert data into seats
+
+-- Insert data into seats for Theater 1
+INSERT INTO seats (seat_row, seat_column, seat_number, seat_available, cleaned, theater_id) VALUES
+('A', 1, 'A1', TRUE, TRUE, 1),
+('A', 2, 'A2', FALSE, TRUE, 1),
+('A', 3, 'A3', TRUE, TRUE, 1),
+('A', 4, 'A4', TRUE, FALSE, 1),
+('A', 5, 'A5', TRUE, TRUE, 1),
+('B', 1, 'B1', TRUE, TRUE, 1),
+('B', 2, 'B2', FALSE, TRUE, 1),
+('B', 3, 'B3', TRUE, TRUE, 1),
+('B', 4, 'B4', TRUE, FALSE, 1),
+('B', 5, 'B5', TRUE, TRUE, 1),
+('C', 1, 'C1', TRUE, TRUE, 1),
+('C', 2, 'C2', FALSE, TRUE, 1),
+('C', 3, 'C3', TRUE, TRUE, 1),
+('C', 4, 'C4', TRUE, FALSE, 1),
+('C', 5, 'C5', TRUE, TRUE, 1),
+('D', 1, 'D1', TRUE, TRUE, 1),
+('D', 2, 'D2', FALSE, TRUE, 1),
+('D', 3, 'D3', TRUE, TRUE, 1),
+('D', 4, 'D4', TRUE, FALSE, 1),
+('D', 5, 'D5', TRUE, TRUE, 1),
+('E', 1, 'E1', TRUE, TRUE, 1),
+('E', 2, 'E2', FALSE, TRUE, 1),
+('E', 3, 'E3', TRUE, TRUE, 1),
+('E', 4, 'E4', TRUE, FALSE, 1),
+('E', 5, 'E5', TRUE, TRUE, 1);
+
+-- Insert data into seats for Theater 2
+INSERT INTO seats (seat_row, seat_column, seat_number, seat_available, cleaned, theater_id) VALUES
+('A', 1, 'A1', TRUE, TRUE, 2),
+('A', 2, 'A2', TRUE, TRUE, 2),
+('A', 3, 'A3', TRUE, TRUE, 2),
+('A', 4, 'A4', TRUE, TRUE, 2),
+('A', 5, 'A5', TRUE, TRUE, 2),
+('B', 1, 'B1', TRUE, TRUE, 2),
+('B', 2, 'B2', TRUE, TRUE, 2),
+('B', 3, 'B3', TRUE, TRUE, 2),
+('B', 4, 'B4', TRUE, TRUE, 2),
+('B', 5, 'B5', TRUE, TRUE, 2),
+('C', 1, 'C1', TRUE, TRUE, 2),
+('C', 2, 'C2', TRUE, TRUE, 2),
+('C', 3, 'C3', TRUE, TRUE, 2),
+('C', 4, 'C4', TRUE, TRUE, 2),
+('C', 5, 'C5', TRUE, TRUE, 2),
+('D', 1, 'D1', TRUE, TRUE, 2),
+('D', 2, 'D2', TRUE, FALSE, 2),
+('D', 3, 'D3', TRUE, TRUE, 2),
+('D', 4, 'D4', TRUE, TRUE, 2),
+('D', 5, 'D5', TRUE, TRUE, 2),
+('E', 1, 'E1', FALSE, TRUE, 2),
+('E', 2, 'E2', TRUE, TRUE, 2),
+('E', 3, 'E3', TRUE, TRUE, 2),
+('E', 4, 'E4', TRUE, TRUE, 2),
+('E', 5, 'E5', TRUE, TRUE, 2),
+('F', 1, 'F1', TRUE, TRUE, 2),
+('F', 2, 'F2', TRUE, TRUE, 2),
+('F', 3, 'F3', TRUE, FALSE, 2),
+('F', 4, 'F4', TRUE, TRUE, 2),
+('F', 5, 'F5', FALSE, TRUE, 2);
+
+-- Insert data into seats for Theater 3
+INSERT INTO seats (seat_row, seat_column, seat_number, seat_available, cleaned, theater_id) VALUES
+('A', 1, 'A1', TRUE, TRUE, 3),
+('A', 2, 'A2', TRUE, TRUE, 3),
+('A', 3, 'A3', TRUE, FALSE, 3),
+('A', 4, 'A4', TRUE, TRUE, 3),
+('A', 5, 'A5', TRUE, TRUE, 3),
+('B', 1, 'B1', TRUE, TRUE, 3),
+('B', 2, 'B2', TRUE, TRUE, 3),
+('B', 3, 'B3', TRUE, TRUE, 3),
+('B', 4, 'B4', TRUE, TRUE, 3),
+('B', 5, 'B5', TRUE, TRUE, 3),
+('C', 1, 'C1', TRUE, FALSE, 3),
+('C', 2, 'C2', TRUE, TRUE, 3),
+('C', 3, 'C3', TRUE, TRUE, 3),
+('C', 4, 'C4', TRUE, TRUE, 3),
+('C', 5, 'C5', TRUE, TRUE, 3),
+('D', 1, 'D1', TRUE, TRUE, 3),
+('D', 2, 'D2', TRUE, TRUE, 3),
+('D', 3, 'D3', TRUE, TRUE, 3),
+('D', 4, 'D4', TRUE, TRUE, 3),
+('D', 5, 'D5', TRUE, TRUE, 3),
+('E', 1, 'E1', TRUE, TRUE, 3),
+('E', 2, 'E2', FALSE, TRUE, 3),
+('E', 3, 'E3', TRUE, TRUE, 3),
+('E', 4, 'E4', TRUE, TRUE, 3),
+('E', 5, 'E5', TRUE, TRUE, 3),
+('F', 1, 'F1', TRUE, TRUE, 3),
+('F', 2, 'F2', TRUE, TRUE, 3),
+('F', 3, 'F3', TRUE, TRUE, 3),
+('F', 4, 'F4', TRUE, TRUE, 3),
+('F', 5, 'F5', TRUE, TRUE, 3);
+
+-- Insert data into seats for Theater 4
+INSERT INTO seats (seat_row, seat_column, seat_number, seat_available, cleaned, theater_id) VALUES
+('A', 1, 'A1', TRUE, TRUE, 4),
+('A', 2, 'A2', TRUE, TRUE, 4),
+('A', 3, 'A3', TRUE, TRUE, 4),
+('A', 4, 'A4', TRUE, TRUE, 4),
+('A', 5, 'A5', TRUE, TRUE, 4),
+('B', 1, 'B1', TRUE, TRUE, 4),
+('B', 2, 'B2', TRUE, TRUE, 4),
+('B', 3, 'B3', TRUE, TRUE, 4),
+('B', 4, 'B4', TRUE, TRUE, 4),
+('B', 5, 'B5', TRUE, TRUE, 4),
+('C', 1, 'C1', TRUE, TRUE, 4),
+('C', 2, 'C2', TRUE, TRUE, 4),
+('C', 3, 'C3', FALSE, TRUE, 4),
+('C', 4, 'C4', TRUE, TRUE, 4),
+('C', 5, 'C5', TRUE, TRUE, 4),
+('D', 1, 'D1', TRUE, TRUE, 4),
+('D', 2, 'D2', TRUE, TRUE, 4),
+('D', 3, 'D3', TRUE, TRUE, 4),
+('D', 4, 'D4', TRUE, TRUE, 4),
+('D', 5, 'D5', TRUE, TRUE, 4),
+('E', 1, 'E1', TRUE, FALSE, 4),
+('E', 2, 'E2', TRUE, TRUE, 4),
+('E', 3, 'E3', TRUE, TRUE, 4),
+('E', 4, 'E4', TRUE, TRUE, 4),
+('E', 5, 'E5', TRUE, TRUE, 4),
+('F', 1, 'F1', TRUE, TRUE, 4),
+('F', 2, 'F2', TRUE, TRUE, 4),
+('F', 3, 'F3', FALSE, TRUE, 4),
+('F', 4, 'F4', TRUE, TRUE, 4),
+('F', 5, 'F5', TRUE, FALSE, 4);
+
+
+-- Table: tickets
+
+CREATE TABLE tickets (
+    ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_type VARCHAR(50) NOT NULL,
+    ticket_price DECIMAL(5, 2) NOT NULL,
+    age_group VARCHAR(50) NOT NULL,
+    seat_id INT NOT NULL,
+    theater_id INT NOT NULL,
+    showtime_id INT NOT NULL,
+    FOREIGN KEY (seat_id) REFERENCES seats(seat_id) ON DELETE CASCADE,
+    FOREIGN KEY (theater_id) REFERENCES theaters(theater_id) ON DELETE CASCADE,
+    FOREIGN KEY (showtime_id) REFERENCES showtimes(showtime_id) ON DELETE CASCADE
+);
+
+-- Insert data into tickets
+
+INSERT INTO tickets (ticket_type, ticket_price, age_group, seat_id, theater_id, showtime_id) VALUES
+('Adult', 15.00, '18-25', 1, 1, 1),
+('Child', 10.00, '0-12', 2, 1, 1);
+
+-- Table: reviews
+
+CREATE TABLE reviews (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    cinema_id INT NOT NULL,
+    stars INT CHECK (stars BETWEEN 1 AND 5),
+    description VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    source_name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+-- Insert data into reviews
+
+INSERT INTO reviews (cinema_id, stars, description, source_name) VALUES
+(1, 5, 'Excellent experience! Clean and organized.', 'Google Reviews'),
+(2, 4, 'Nice theater with great customer service.', 'Yelp');
+
+-- Table: employees
+
+CREATE TABLE employees (
+    employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_fullname VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    emp_password VARCHAR(255) NOT NULL,
+    emp_email VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    admin_flag BOOLEAN NOT NULL,
+    jobtitle VARCHAR(255) NOT NULL,
+    cinema_id INT NOT NULL,
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+-- Insert data into employees
+INSERT INTO employees (employee_fullname, username, emp_password, emp_email, admin_flag, jobtitle, cinema_id) VALUES
+('John Doe', 'johndoe', 'password123', 'johndoe@reeltime.com', TRUE, 'General Manager', 1),
+('Jane Smith', 'janesmith', 'securepass', 'janesmith@reeltime.com', FALSE, 'Usher', 1),
+('Mike Johnson', 'mikejohnson', 'mike2024', 'mikejohnson@reeltime.com', FALSE, 'Technician', 2),
+('Alice Brown', 'alicebrown', 'alice1234', 'alicebrown@reeltime.com', TRUE, 'Assistant Manager', 2);
 
 -- Temporarily disable safe mode
 SET SQL_SAFE_UPDATES = 0;

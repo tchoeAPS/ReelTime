@@ -13,6 +13,7 @@ import {
   updateSeatCleanedStatus,
   employees,
   newEmployee,
+  login,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
@@ -232,6 +233,22 @@ router.post('/newEmployee', async (req, res) => {
     return res.status(201).json({ message: 'Employee added successfully' });
   } catch (error) {
     console.error('Error adding employee:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/login', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { username, password } = req.body;
+    const [result] = await connection.query(login, [username, password]);
+    if (result && result.length > 0 && result[0].recordExists === 1) {
+      return res.json({ message: 'Login successful' });
+    } else {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error('Error logging in:', error);
     res.status(500).json({ error: error.message });
   }
 });

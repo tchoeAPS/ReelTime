@@ -8,7 +8,7 @@ SELECT
   view_rating, 
   genre, 
   director
-FROM movies`;
+FROM movies;`;
 
 export const insertMovie = `
   INSERT INTO movies (
@@ -24,9 +24,9 @@ export const insertMovie = `
       ?,
       ?,
       ?
-  )`;
+  );`;
 
-export const updateShowtimeWithMovie = `UPDATE showtimes SET movie_id = ? WHERE showtime_id = ?`;
+export const updateShowtimeWithMovie = `UPDATE showtimes SET movie_id = ? WHERE showtime_id = ?;`;
 
 export const getShowtimesByTheater = `
 SELECT s.showtime_id, 
@@ -37,7 +37,7 @@ SELECT s.showtime_id,
   m.image_url
 FROM showtimes s
 JOIN movies m ON s.movie_id = m.movie_id
-WHERE s.theater_id = ?
+WHERE s.theater_id = ?;
 `;
 
 export const getShowtimesByMovie = `
@@ -50,7 +50,7 @@ SELECT s.showtime_id,
 FROM showtimes s 
 JOIN theaters t ON s.theater_id = t.theater_id 
 JOIN movies m ON s.movie_id = m.movie_id 
-WHERE s.movie_id = ?
+WHERE s.movie_id = ?;
 `;
 
 export const getShowtimeById = `
@@ -64,52 +64,62 @@ SELECT s.showtime_id,
 FROM showtimes s 
 JOIN movies m ON s.movie_id = m.movie_id 
 JOIN theaters t ON s.theater_id = t.theater_id 
-WHERE s.showtime_id = ?
+WHERE s.showtime_id = ?;
 `;
 
 export const updateTicketsAvailable = `
 UPDATE 
   showtimes 
 SET tickets_available = ? 
-WHERE showtime_id = ?`;
+WHERE showtime_id = ?;`;
 
 export const getTheaters = `
 SELECT 
   theater_id, theater_name, cinema_id, capacity, cleaned, 3D_Flag 
-FROM theaters`;
+FROM theaters;`;
 
 export const addShowtime = `
 INSERT INTO showtimes 
   (start_time, end_time, tickets_available, theater_id, movie_id) 
 VALUES 
-  (?, ?, ?, ?, ?)`;
+  (?, ?, ?, ?, ?);`;
 
 export const selectSeat = `
 SELECT 
   seat_id 
 FROM seats 
 WHERE 
-  seat_id = ? and theater_id = ?`;
+  seat_id = ? and theater_id = ?;`;
 
 export const reserveSeat = `
 UPDATE 
   seats 
 SET seat_available = false 
-WHERE seat_id = ? and theater_id = ?`;
+WHERE seat_id = ? and theater_id = ?;`;
 
 export const updateSeatCleanedStatus = `
 UPDATE 
   seats 
 SET cleaned = ? 
-WHERE seat_id = ? and theater_id = ?`;
+WHERE seat_id = ? and theater_id = ?;`;
 
 export const employees = `
 SELECT 
   employee_id, job_title, username, emp_email 
-FROM employees`;
+FROM employees;`;
 
 export const newEmployee = `
 INSERT INTO employees 
   (username, emp_password, emp_email, created_at, admin_flag, job_title, cinema_id) 
 VALUES 
-  (?, ?, ?, ?, ?, ?, ?)`;
+  (?, ?, ?, ?, ?, ?, ?);`;
+
+export const login = `
+SELECT EXISTS(
+    SELECT 1
+    FROM employees
+    WHERE 
+      username = ?
+      AND emp_password = ?
+) AS recordExists;
+`;
