@@ -28,16 +28,19 @@
             margin-top: 15px;
         }
 
-        .header-buttons a {
+        .header-buttons a, .header-buttons button {
             text-decoration: none;
             margin: 5px;
             padding: 10px 20px;
             background-color: #285b86;
             color: white;
             border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        .header-buttons a:hover {
+        .header-buttons a:hover, .header-buttons button:hover {
             background-color: #1a4566;
         }
 
@@ -74,6 +77,57 @@
             font-size: 14px;
             color: #bbb;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #444;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            color: white;
+            text-align: center;
+        }
+
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: white;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content .save-btn {
+            background-color: #285b86;
+            color: white;
+        }
+
+        .modal-content .cancel-btn {
+            background-color: #555;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +136,7 @@
         <div class="header-buttons">
             <a href="cinemaadminlaunchpad.html">Back to Admin Dashboard</a>
             <a href="reeltime.html">Back to Homepage</a>
+            <button onclick="openModal()">Add Movie</button>
         </div>
     </div>
     <div class="movie-grid">
@@ -132,7 +187,71 @@
             <img src="images/speaknoevil.jpg" alt="Speak No Evil">
             <h2>Speak No Evil</h2>
             <p>Horror | R</p>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="addMovieModal">
+        <div class="modal-content">
+            <h2>Add Movie</h2>
+            <form id="addMovieForm" enctype="multipart/form-data">
+                <label for="movieImage">Movie Image:</label>
+                <input type="file" id="movieImage" name="movieImage" accept="image/*" required>
+                
+                <label for="movieTitle">Title:</label>
+                <input type="text" id="movieTitle" name="movieTitle" placeholder="Enter title" required>
+                
+                <label for="movieDescription">Description:</label>
+                <textarea id="movieDescription" name="movieDescription" rows="3" placeholder="Enter description" required></textarea>
+                
+                <label for="movieGenre">Genre:</label>
+                <input type="text" id="movieGenre" name="movieGenre" placeholder="Enter genre" required>
+                
+                <label for="movieRating">Rating:</label>
+                <input type="text" id="movieRating" name="movieRating" placeholder="e.g., PG, R" required>
+                
+                <label for="movieDirector">Director:</label>
+                <input type="text" id="movieDirector" name="movieDirector" placeholder="Enter director" required>
+                
+                <button type="button" class="save-btn" onclick="submitMovie()">Save</button>
+                <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+            </form>
         </div>
     </div>
+
+    <script>
+        const modal = document.getElementById('addMovieModal');
+
+        function openModal() {
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function submitMovie() {
+            const form = document.getElementById('addMovieForm');
+            const formData = new FormData(form);
+
+            fetch('/upload_movie', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Movie added successfully!');
+                closeModal();
+            })
+            .catch(error => {
+                alert('Error adding movie: ' + error.message);
+            });
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        };
+    </script>
 </body>
 </html>
