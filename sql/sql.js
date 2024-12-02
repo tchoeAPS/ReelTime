@@ -105,12 +105,13 @@ WHERE seat_id = ? and theater_id = ?;`;
 
 export const employees = `
 SELECT 
-  employee_id, job_title, username, emp_email 
-FROM employees;`;
+  employee_id, jobtitle, employee_fullname, emp_email, cinema_name
+FROM employees
+JOIN cinemas ON employees.cinema_id = cinemas.cinema_id`;
 
 export const newEmployee = `
 INSERT INTO employees 
-  (username, emp_password, emp_email, created_at, admin_flag, job_title, cinema_id) 
+  (employee_fullname, username, emp_password, emp_email, admin_flag, jobtitle, cinema_id) 
 VALUES 
   (?, ?, ?, ?, ?, ?, ?);`;
 
@@ -123,3 +124,6 @@ SELECT EXISTS(
       AND emp_password = ?
 ) AS recordExists;
 `;
+
+export const cinemas = `
+SELECT cinema_id, cinema_name FROM cinemas;`;

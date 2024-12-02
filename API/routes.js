@@ -14,6 +14,7 @@ import {
   employees,
   newEmployee,
   login,
+  cinemas,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
@@ -201,8 +202,22 @@ router.post('/updateSeatCleanedStatus', async (req, res) => {
 router.get('/employees', async (req, res) => {
   const connection = req.db;
   try {
-    const [employees] = await connection.query(employees);
-    return res.json(employees);
+    const [results] = await connection.query(employees);
+    return res.json(results);
+  } catch (error) {
+    console.error('Error fetching employees:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/employeesFilter', async (req, res) => {
+  const connection = req.db;
+  try {
+    const [results] = await connection.query(
+      employees +
+        ` WHERE employee_fullname LIKE '%${req.query.employee_fullname}%'`
+    );
+    return res.json(results);
   } catch (error) {
     console.error('Error fetching employees:', error);
     res.status(500).json({ error: error.message });
@@ -213,21 +228,21 @@ router.post('/newEmployee', async (req, res) => {
   const connection = req.db;
   try {
     const {
+      employee_fullname,
       username,
       emp_password,
       emp_email,
-      created_at,
       admin_flag,
-      job_title,
+      jobtitle,
       cinema_id,
     } = req.body;
     await connection.query(newEmployee, [
+      employee_fullname,
       username,
       emp_password,
       emp_email,
-      created_at,
       admin_flag,
-      job_title,
+      jobtitle,
       cinema_id,
     ]);
     return res.status(201).json({ message: 'Employee added successfully' });
@@ -249,6 +264,17 @@ router.post('/login', async (req, res) => {
     }
   } catch (error) {
     console.error('Error logging in:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/cinemas', async (req, res) => {
+  const connection = req.db;
+  try {
+    const [results] = await connection.query(cinemas);
+    return res.json(results);
+  } catch (error) {
+    console.error('Error fetching cinemas:', error);
     res.status(500).json({ error: error.message });
   }
 });
