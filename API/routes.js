@@ -15,6 +15,7 @@ import {
   newEmployee,
   login,
   cinemas,
+  getSeatsByTheater,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
@@ -275,6 +276,19 @@ router.get('/cinemas', async (req, res) => {
     return res.json(results);
   } catch (error) {
     console.error('Error fetching cinemas:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/seatsByTheater', async (req, res) => {
+  const connection = req.db;
+  try {
+    const [results] = await connection.query(getSeatsByTheater, [
+      req.query.theater_id,
+    ]);
+    return res.json(results);
+  } catch (error) {
+    console.error('Error fetching seats:', error);
     res.status(500).json({ error: error.message });
   }
 });

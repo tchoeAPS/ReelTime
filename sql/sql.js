@@ -127,3 +127,9 @@ SELECT EXISTS(
 
 export const cinemas = `
 SELECT cinema_id, cinema_name FROM cinemas;`;
+
+export const getSeatsByTheater = `
+SELECT 
+  seat_row, seat_column, seat_number, seat_available, cleaned
+FROM seats
+WHERE theater_id = ?;`;
