@@ -47,35 +47,50 @@
         border: none;
         background-color: #444;
         color: white;
-      }
+    }
+
+
       .seating-chart {
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        gap: 5px;
-        justify-content: center;
-        margin: 20px 0;
-      }
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); 
+          column-gap: 6px;
+          row-gap: 100px;
+          justify-content: center; 
+          margin: 20px 0; 
+}
+
       .seat {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 5px;
-        height: 40px;
-        color: black;
-        font-weight: bold;
-        cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          height: 40px;
+          width: 100%; 
+          font-size: 14px;
+          font-weight: bold;
+          color: black;
+          cursor: pointer;
+          margin-bottom:10px;
+
+      .seat:last-child {
+         margin-bottom:0;
       }
+}
+
       .seat.available {
-        background-color: lightgreen;
-      }
+          background-color: lightgreen;
+}
+
       .seat.reserved {
-        background-color: lightcoral;
-        cursor: not-allowed;
-      }
+          background-color: lightcoral;
+          cursor: not-allowed;
+}
+
       .seat.selected {
-        background-color: #f5c451;
-        color: black;
-      }
+          background-color: #f5c451;
+          color: black;
+}
+
       .selected-seat-details {
         margin-top: 20px;
         font-size: 18px;
@@ -173,23 +188,37 @@
     <div class="modal" id="reservationModal">
       <div class="modal-content">
         <h2>Reserve Seat</h2>
-        <label>Date: <input type="date" /></label><br /><br />
-        <label>Time: <input type="time" /></label><br /><br />
-        <label
-          >Movie:
-          <select>
-            <option>Wicked</option>
-            <option>Beetlejuice 2</option>
-            <option>Deadpool & Wolverine</option>
-          </select> </label
-        ><br /><br />
+        <label for="cinemaDropdown">Cinema:</label>
+        <select id="cinemaDropdown">
+          <!-- Dynamically populated cinemas -->
+        </select>
+        <br /><br />
+      
+        <label for="theaterDropdown">Theater:</label>
+        <select id="modalTheaterDropdown">
+          <!-- Dynamically populated theaters -->
+        </select>
+        <br /><br />
+      
+        <label for="dateInput">Date:</label>
+        <input type="date" id="dateInput" />
+        <br /><br />
+      
+        <label for="timeInput">Time:</label>
+        <input type="time" id="timeInput" />
+        <br /><br />
+      
+        <label for="movieDropdown">Movie:</label>
+        <select id="movieDropdown">
+          <!-- Dynamically populated movies -->
+        </select>
+        <br /><br />
+      
         <button class="save-btn">Save</button>
-        <button
-          class="cancel-btn"
-          onclick="document.getElementById('reservationModal').style.display='none'">
+        <button class="cancel-btn" onclick="document.getElementById('reservationModal').style.display='none'">
           Cancel
         </button>
-      </div>
+      </div>      
     </div>
     <script src="js/theater_employee.js"></script>
   </body>
