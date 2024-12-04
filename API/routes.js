@@ -58,6 +58,26 @@ router.post('/create-movie', async (req, res) => {
   }
 });
 
+router.get('/getTheatersByCinema', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { cinema_id } = req.query;
+    const [theaters] = await connection.query(
+      `
+      SELECT theater_id, theater_name, cinema_id 
+      FROM theaters 
+      WHERE cinema_id = ?;
+      `,
+      [cinema_id]
+    );
+    res.json(theaters);
+  } catch (error) {
+    console.error('Error fetching theaters by cinema:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 router.post('/updateShowtimeWithMovie', async (req, res) => {
   const connection = req.db;
   try {
@@ -272,13 +292,16 @@ router.post('/login', async (req, res) => {
 router.get('/cinemas', async (req, res) => {
   const connection = req.db;
   try {
-    const [results] = await connection.query(cinemas);
-    return res.json(results);
+    const [cinemas] = await connection.query(`
+      SELECT cinema_id, cinema_name FROM cinemas;
+    `);
+    res.json(cinemas);
   } catch (error) {
     console.error('Error fetching cinemas:', error);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 router.get('/seatsByTheater', async (req, res) => {
   const connection = req.db;
@@ -292,5 +315,53 @@ router.get('/seatsByTheater', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.get('/getMoviesByFilters', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { cinema_id, theater_id, date, time } = req.query; // Expecting these parameters
+    console.log('Received parameters:', { cinema_id, theater_id, date, time });
+
+    const [movies] = await connection.query(
+      `
+      SELECT DISTINCT m.movie_id, m.movie_title 
+      FROM showtimes s
+      JOIN movies m ON s.movie_id = m.movie_id
+      JOIN theaters t ON s.theater_id = t.theater_id
+      WHERE t.cinema_id = ? 
+        AND s.theater_id = ? 
+        AND DATE(s.start_time) = ? 
+        AND TIME(s.start_time) >= ?;
+      `,
+      [cinema_id, theater_id, date, time]
+    );
+
+    console.log('Query results:', movies); // Debugging log
+    res.json(movies);
+  } catch (error) {
+    console.error('Error fetching movies by filters:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/requestCleaning', async (req, res) => {
+  const connection = req.db;
+  try {
+    const { seatNumber, theaterId } = req.body; 
+    await connection.query(
+      `
+      UPDATE seats 
+      SET request_cleaning = TRUE, cleaned = FALSE 
+      WHERE seat_number = ? AND theater_id = ?;
+      `,
+      [seatNumber, theaterId]
+    );
+    return res.status(200).json({ message: 'Cleaning requested successfully.' });
+  } catch (error) {
+    console.error('Error requesting cleaning:', error);
+    res.status(500).json({ error: 'Failed to request cleaning.' });
+  }
+});
+
 
 export default router;
