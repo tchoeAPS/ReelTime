@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log('API response data:', data);
-
         if (data.message === 'Login successful') {
           const employeeData = data.data;
           localStorage.setItem('userFullName', employeeData.employee_fullname);

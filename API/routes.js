@@ -19,6 +19,8 @@ import {
   getSeatsByTheater,
   requestCleaning,
   getTheatersByCinema,
+  selectSeat,
+  getTicket,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
@@ -173,10 +175,7 @@ router.get('/selectSeat', async (req, res) => {
   const connection = req.db;
   try {
     const { seat_id, theater_id } = req.query;
-    const [seat] = await connection.query(updateTicketsAvailable, [
-      seat_id,
-      theater_id,
-    ]);
+    const [seat] = await connection.query(selectSeat, [seat_id, theater_id]);
     return res.json(seat);
   } catch (error) {
     console.error('Error selecting ticket:', error);
@@ -187,8 +186,22 @@ router.get('/selectSeat', async (req, res) => {
 router.post('/reserveSeat', async (req, res) => {
   const connection = req.db;
   try {
-    const { seat_id, theater_id } = req.body;
-    await connection.query(reserveSeat, [seat_id, theater_id]);
+    const {
+      ticket_type,
+      ticket_price,
+      age_group,
+      seat_id,
+      theater_id,
+      showtime_id,
+    } = req.body;
+    await connection.query(reserveSeat, [
+      ticket_type,
+      ticket_price,
+      age_group,
+      seat_id,
+      theater_id,
+      showtime_id,
+    ]);
     return res.status(201).json({ message: 'Seat reserved successfully' });
   } catch (error) {
     console.error('Error reserving seat:', error);
@@ -317,7 +330,6 @@ router.get('/getMoviesByFilters', async (req, res) => {
   const connection = req.db;
   try {
     const { cinema_id, theater_id, date, time } = req.query;
-    console.log('Received parameters:', { cinema_id, theater_id, date, time });
 
     const [movies] = await connection.query(getMoviesByFilters, [
       cinema_id,
@@ -332,17 +344,14 @@ router.get('/getMoviesByFilters', async (req, res) => {
   }
 });
 
-router.post('/requestCleaning', async (req, res) => {
+router.get('/getTicket', async (req, res) => {
   const connection = req.db;
   try {
-    const { seatNumber, theaterId } = req.body;
-    await connection.query(requestCleaning, [seatNumber, theaterId]);
-    return res
-      .status(200)
-      .json({ message: 'Cleaning requested successfully.' });
+    const [ticket] = await connection.query(getTicket, [req.query.seat_id]);
+    return res.json(ticket);
   } catch (error) {
-    console.error('Error requesting cleaning:', error);
-    res.status(500).json({ error: 'Failed to request cleaning.' });
+    console.error('Error fetching ticket:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

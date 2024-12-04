@@ -74,32 +74,8 @@
     <div class="container">
       <a href="manage_showtimes.html" class="button">Showtimes Manager</a>
       <a href="movies_inventory.html" class="button">Movies Inventory</a>
-      <a
-        href="theater_employee.html"
-        class="button"
-        id="theaterEmployee"
-        style="display: none">
-        Theater: Employee
-      </a>
-      <a
-        href="theater_manager.html"
-        class="button"
-        id="theaterManager"
-        style="display: none">
-        Theater: Manager
-      </a>
+      <a href="theater_employee.html" class="button">Theater</a>
       <a href="employee_dashboard.html" class="button">Employee Dashboard</a>
     </div>
-
-    <script>
-      const theaterEmployee = document.getElementById('theaterEmployee');
-      const theaterManager = document.getElementById('theaterManager');
-      const adminFlag = localStorage.getItem('adminFlag');
-      if (adminFlag === '1') {
-        theaterManager.style.display = 'block';
-      } else {
-        theaterEmployee.style.display = 'block';
-      }
-    </script>
   </body>
 </html>

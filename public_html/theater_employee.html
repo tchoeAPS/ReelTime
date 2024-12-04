@@ -47,49 +47,48 @@
         border: none;
         background-color: #444;
         color: white;
-    }
-
+      }
 
       .seating-chart {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); 
-          column-gap: 6px;
-          row-gap: 100px;
-          justify-content: center; 
-          margin: 20px 0; 
-}
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        column-gap: 6px;
+        row-gap: 100px;
+        justify-content: center;
+        margin: 20px 0;
+      }
 
       .seat {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-          height: 40px;
-          width: 100%; 
-          font-size: 14px;
-          font-weight: bold;
-          color: black;
-          cursor: pointer;
-          margin-bottom:10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        height: 40px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: bold;
+        color: black;
+        cursor: pointer;
+        margin-bottom: 10px;
 
-      .seat:last-child {
-         margin-bottom:0;
+        .seat:last-child {
+          margin-bottom: 0;
+        }
       }
-}
 
       .seat.available {
-          background-color: lightgreen;
-}
+        background-color: lightgreen;
+      }
 
       .seat.reserved {
-          background-color: lightcoral;
-          cursor: not-allowed;
-}
+        background-color: lightcoral;
+        cursor: not-allowed;
+      }
 
       .seat.selected {
-          background-color: #f5c451;
-          color: black;
-}
+        background-color: #f5c451;
+        color: black;
+      }
 
       .selected-seat-details {
         margin-top: 20px;
@@ -169,17 +168,14 @@
       </div>
     </div>
     <div class="theater-container">
-      <select class="dropdown" id="theaterDropdown">
-        <!-- Dynamically populated theaters -->
-      </select>
-      <div class="seating-chart" id="seatingChart">
-        <!-- Dynamically populated seats -->
-      </div>
+      <select class="dropdown" id="theaterDropdown"></select>
+      <select class="dropdown" id="showtimeDropdown"></select>
+      <div class="seating-chart" id="seatingChart"></div>
       <div class="selected-seat-details" id="selectedSeatDetails">
         Seat: None | Status: None | Cleaned: None
       </div>
       <div class="buttons">
-        <button class="button clean-btn">Mark as Cleaned</button>
+        <button class="button clean-btn" id="cleanBtn">Mark as Cleaned</button>
         <button class="button reserve-btn" id="reserveBtn">
           Mark as Reserved
         </button>
@@ -188,37 +184,26 @@
     <div class="modal" id="reservationModal">
       <div class="modal-content">
         <h2>Reserve Seat</h2>
-        <label for="cinemaDropdown">Cinema:</label>
-        <select id="cinemaDropdown">
-          <!-- Dynamically populated cinemas -->
+        <label for="ageGroup">Age Group:</label>
+        <select id="ageGroup">
+          <option value="" disabled selected>Select an age group</option>
+          <option value="child">Child (0-12)</option>
+          <option value="regular">Regular (13-64)</option>
+          <option value="senior">Senior (65+)</option>
         </select>
         <br /><br />
-      
-        <label for="theaterDropdown">Theater:</label>
-        <select id="modalTheaterDropdown">
-          <!-- Dynamically populated theaters -->
-        </select>
+
+        <label for="ticketPrice">Ticket Price:</label>
+        <input type="text" id="ticketPrice" placeholder="Price" readonly />
         <br /><br />
-      
-        <label for="dateInput">Date:</label>
-        <input type="date" id="dateInput" />
-        <br /><br />
-      
-        <label for="timeInput">Time:</label>
-        <input type="time" id="timeInput" />
-        <br /><br />
-      
-        <label for="movieDropdown">Movie:</label>
-        <select id="movieDropdown">
-          <!-- Dynamically populated movies -->
-        </select>
-        <br /><br />
-      
+
         <button class="save-btn">Save</button>
-        <button class="cancel-btn" onclick="document.getElementById('reservationModal').style.display='none'">
+        <button
+          class="cancel-btn"
+          onclick="document.getElementById('reservationModal').style.display='none'">
           Cancel
         </button>
-      </div>      
+      </div>
     </div>
     <script src="js/theater_employee.js"></script>
   </body>

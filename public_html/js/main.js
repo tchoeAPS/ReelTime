@@ -85,7 +85,6 @@ function sendLoadTimesRequest() {
 
 // Function to update the available showtimes table in the HTML
 function updateTimes(timesArr) {
-  console.log('Updating available showtimes table:', timesArr);
   let table = document.getElementById('showtimeTable');
 
   // Clear existing rows in the table except the header row

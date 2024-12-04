@@ -30,8 +30,8 @@ export const updateShowtimeWithMovie = `UPDATE showtimes SET movie_id = ? WHERE 
 
 export const getShowtimesByTheater = `
 SELECT s.showtime_id, 
-  CONVERT_TZ(s.start_time, '+00:00', 'America/New_York') AS start_time, 
-  CONVERT_TZ(s.end_time, '+00:00', 'America/New_York') AS end_time, 
+  s.start_time,
+  s.end_time,
   s.tickets_available, 
   m.movie_title, 
   m.image_url
@@ -92,10 +92,10 @@ WHERE
   seat_id = ? and theater_id = ?;`;
 
 export const reserveSeat = `
-UPDATE 
-  seats 
-SET seat_available = false 
-WHERE seat_id = ? and theater_id = ?;`;
+INSERT INTO tickets 
+  (ticket_type, ticket_price, age_group, seat_id, theater_id, showtime_id) 
+VALUES 
+  (?, ?, ?, ?, ?, ?);`;
 
 export const updateSeatCleanedStatus = `
 UPDATE 
@@ -130,7 +130,20 @@ SELECT cinema_id, cinema_name FROM cinemas;`;
 
 export const getSeatsByTheater = `
 SELECT 
-  seat_row, seat_column, seat_number, seat_available, cleaned
+  seat_row, 
+  seat_column, 
+  seat_number, 
+  cleaned, 
+  seat_id,
+  theater_id,
+  CASE 
+    WHEN EXISTS (
+      SELECT 1 
+      FROM tickets 
+      WHERE tickets.seat_id = seats.seat_id
+    ) THEN 0
+    ELSE 1
+  END AS seat_available
 FROM seats
 WHERE theater_id = ?;`;
 
@@ -163,3 +176,12 @@ export const getTheatersByCinema = `
   SELECT theater_id, theater_name, cinema_id 
       FROM theaters 
       WHERE cinema_id = ?;`;
+
+export const getTicket = `
+SELECT 
+  ticket_id,
+  ticket_type, 
+  ticket_price, 
+  age_group
+FROM tickets
+WHERE seat_id = ?;`;
