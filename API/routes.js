@@ -23,6 +23,7 @@ import {
   getTicket,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
+import { getReviewsByCinemaId } from '../sql/sql.js';
 
 const router = express.Router();
 
@@ -75,12 +76,21 @@ router.get('/getTheatersByCinema', async (req, res) => {
 router.post('/updateShowtimeWithMovie', async (req, res) => {
   const connection = req.db;
   try {
-    const { showtimeId, movieId } = req.body;
-    await connection.query(updateShowtimeWithMovie, [movieId, showtimeId]);
-    return res.status(200).json({ message: 'Showtime updated successfully' });
+    console.log('Request Body:', req.body);  
+    const { showtimeId, movieId, startTime, endTime } = req.body;
+
+      if (!movieId || !startTime || !endTime) {
+          return res.status(400).json({ error: "All fields are required." });
+      }
+
+      await connection.query(
+          `UPDATE showtimes SET movie_id = ?, start_time = ?, end_time = ? WHERE showtime_id = ?`,
+          [movieId, startTime, endTime, showtimeId]
+      );
+      return res.status(200).json({ message: 'Showtime updated successfully' });
   } catch (error) {
-    console.error('Error updating showtime:', error);
-    res.status(500).json({ error: error.message });
+      console.error('Error updating showtime:', error);
+      res.status(500).json({ error: error.message });
   }
 });
 
@@ -354,5 +364,23 @@ router.get('/getTicket', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.get('/reviews', async (req, res) => {
+    const connection = req.db;
+    const { cinema_id } = req.query;
+
+    if (!cinema_id) {
+        return res.status(400).json({ error: 'Cinema ID is required' });
+    }
+
+    try {
+        const [reviews] = await connection.query(getReviewsByCinemaId, [cinema_id]);
+        res.json({ reviews });
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        res.status(500).json({ error: 'Failed to fetch reviews' });
+    }
+});
+
 
 export default router;
