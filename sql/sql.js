@@ -130,22 +130,19 @@ SELECT cinema_id, cinema_name FROM cinemas;`;
 
 export const getSeatsByTheater = `
 SELECT 
-  seat_row, 
-  seat_column, 
-  seat_number, 
-  cleaned, 
-  seat_id,
-  theater_id,
+  s.seat_row, 
+  s.seat_column, 
+  s.seat_number, 
+  s.cleaned, 
+  s.seat_id,
+  s.theater_id,
   CASE 
-    WHEN EXISTS (
-      SELECT 1 
-      FROM tickets 
-      WHERE tickets.seat_id = seats.seat_id
-    ) THEN 0
+    WHEN t.seat_id IS NOT NULL THEN 0
     ELSE 1
   END AS seat_available
-FROM seats
-WHERE theater_id = ?;`;
+FROM seats s
+LEFT JOIN tickets t ON s.seat_id = t.seat_id
+WHERE s.theater_id = ?;`;
 
 export const usernameExists = `
   SELECT EXISTS(
