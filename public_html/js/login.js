@@ -34,11 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
       .then((data) => {
         console.log('API response data:', data);
         if (data.message === 'Login successful') {
-          window.location.href = 'reeltime.html'; // Adjust as needed
+            localStorage.setItem('userFullName', data.employee_fullname);
+            window.location.href = 'reeltime.html'; 
         } else {
-          alert('Invalid username or password.');
+            alert('Invalid username or password.');
         }
-      })
+    })
+    
       .catch((error) => {
         console.error('Login error:', error);
         alert(
