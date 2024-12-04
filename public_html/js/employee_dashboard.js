@@ -128,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cinema_id,
       };
 
-      // Make the POST request
       const response = await fetch('http://localhost:3000/api/newEmployee', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -167,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchEmployees(); // Refresh employee table
     } catch (error) {
       console.error('Error adding employee:', error);
-      alert('Error adding employee. Please try again.');
+      alert(`Error adding employee. Please try again.`);
     }
   };
 

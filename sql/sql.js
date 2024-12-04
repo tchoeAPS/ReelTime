@@ -116,14 +116,14 @@ VALUES
   (?, ?, ?, ?, ?, ?, ?);`;
 
 export const login = `
-SELECT EXISTS(
-    SELECT 1
-    FROM employees
-    WHERE 
-      username = ?
-      AND emp_password = ?
-) AS recordExists;
-`;
+SELECT 
+  employee_fullname,
+  admin_flag,
+  cinema_id,
+  cinema_name
+FROM employees
+NATURAL JOIN cinemas
+WHERE username = ? AND emp_password = ?;`;
 
 export const cinemas = `
 SELECT cinema_id, cinema_name FROM cinemas;`;
@@ -133,3 +133,33 @@ SELECT
   seat_row, seat_column, seat_number, seat_available, cleaned
 FROM seats
 WHERE theater_id = ?;`;
+
+export const usernameExists = `
+  SELECT EXISTS(
+    SELECT 1
+    FROM employees
+    WHERE 
+      username = ?
+) AS recordExists;
+`;
+
+export const getMoviesByFilters = `
+SELECT DISTINCT m.movie_id, m.movie_title 
+ FROM showtimes s
+ JOIN movies m ON s.movie_id = m.movie_id
+ JOIN theaters t ON s.theater_id = t.theater_id
+ WHERE t.cinema_id = ? 
+   AND s.theater_id = ? 
+   AND DATE(s.start_time) = ? 
+   AND TIME(s.start_time) >= ?;`;
+
+export const requestCleaning = `
+UPDATE seats 
+  SET request_cleaning = TRUE, cleaned = FALSE 
+  WHERE seat_number = ? AND theater_id = ?;
+`;
+
+export const getTheatersByCinema = `
+  SELECT theater_id, theater_name, cinema_id 
+      FROM theaters 
+      WHERE cinema_id = ?;`;

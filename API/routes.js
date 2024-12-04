@@ -14,14 +14,16 @@ import {
   employees,
   newEmployee,
   login,
-  cinemas,
+  getMoviesByFilters,
+  usernameExists,
   getSeatsByTheater,
+  requestCleaning,
+  getTheatersByCinema,
 } from '../sql/sql.js';
 import { sortResults } from './helpers.js';
 
 const router = express.Router();
 
-// example of GET API
 router.get('/movies', async (req, res) => {
   const connection = req.db;
   try {
@@ -36,14 +38,12 @@ router.get('/movies', async (req, res) => {
   }
 });
 
-// example of POST API
 router.post('/create-movie', async (req, res) => {
   const connection = req.db;
   try {
     const { movie_title, description, image_url, duration, view_rating } =
       req.body;
 
-    // Insert the movie into the database
     await connection.query(insertMovie, [
       movie_title,
       description,
@@ -62,21 +62,13 @@ router.get('/getTheatersByCinema', async (req, res) => {
   const connection = req.db;
   try {
     const { cinema_id } = req.query;
-    const [theaters] = await connection.query(
-      `
-      SELECT theater_id, theater_name, cinema_id 
-      FROM theaters 
-      WHERE cinema_id = ?;
-      `,
-      [cinema_id]
-    );
+    const [theaters] = await connection.query(getTheatersByCinema, [cinema_id]);
     res.json(theaters);
   } catch (error) {
     console.error('Error fetching theaters by cinema:', error);
     res.status(500).json({ error: error.message });
   }
 });
-
 
 router.post('/updateShowtimeWithMovie', async (req, res) => {
   const connection = req.db;
@@ -125,7 +117,7 @@ router.get('/getShowtimeById', async (req, res) => {
   try {
     const { showtimeId } = req.query;
     const [showtime] = await connection.query(getShowtimeById, [showtimeId]);
-    return res.json(showtime); // Respond with the showtime details
+    return res.json(showtime);
   } catch (error) {
     console.error('Error fetching showtime:', error);
     res.status(500).json({ error: error.message });
@@ -257,6 +249,12 @@ router.post('/newEmployee', async (req, res) => {
       jobtitle,
       cinema_id,
     } = req.body;
+    const [duplicateUsername] = await connection.query(usernameExists, [
+      username,
+    ]);
+    if (duplicateUsername[0].recordExists > 0) {
+      throw new Error('Username already exists');
+    }
     await connection.query(newEmployee, [
       employee_fullname,
       username,
@@ -278,8 +276,8 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const [result] = await connection.query(login, [username, password]);
-    if (result && result.length > 0 && result[0].recordExists === 1) {
-      return res.json({ message: 'Login successful' });
+    if (result && result.length > 0) {
+      return res.json({ message: 'Login successful', data: result[0] });
     } else {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
@@ -302,7 +300,6 @@ router.get('/cinemas', async (req, res) => {
   }
 });
 
-
 router.get('/seatsByTheater', async (req, res) => {
   const connection = req.db;
   try {
@@ -319,24 +316,15 @@ router.get('/seatsByTheater', async (req, res) => {
 router.get('/getMoviesByFilters', async (req, res) => {
   const connection = req.db;
   try {
-    const { cinema_id, theater_id, date, time } = req.query; // Expecting these parameters
+    const { cinema_id, theater_id, date, time } = req.query;
     console.log('Received parameters:', { cinema_id, theater_id, date, time });
 
-    const [movies] = await connection.query(
-      `
-      SELECT DISTINCT m.movie_id, m.movie_title 
-      FROM showtimes s
-      JOIN movies m ON s.movie_id = m.movie_id
-      JOIN theaters t ON s.theater_id = t.theater_id
-      WHERE t.cinema_id = ? 
-        AND s.theater_id = ? 
-        AND DATE(s.start_time) = ? 
-        AND TIME(s.start_time) >= ?;
-      `,
-      [cinema_id, theater_id, date, time]
-    );
-
-    console.log('Query results:', movies); // Debugging log
+    const [movies] = await connection.query(getMoviesByFilters, [
+      cinema_id,
+      theater_id,
+      date,
+      time,
+    ]);
     res.json(movies);
   } catch (error) {
     console.error('Error fetching movies by filters:', error);
@@ -347,21 +335,15 @@ router.get('/getMoviesByFilters', async (req, res) => {
 router.post('/requestCleaning', async (req, res) => {
   const connection = req.db;
   try {
-    const { seatNumber, theaterId } = req.body; 
-    await connection.query(
-      `
-      UPDATE seats 
-      SET request_cleaning = TRUE, cleaned = FALSE 
-      WHERE seat_number = ? AND theater_id = ?;
-      `,
-      [seatNumber, theaterId]
-    );
-    return res.status(200).json({ message: 'Cleaning requested successfully.' });
+    const { seatNumber, theaterId } = req.body;
+    await connection.query(requestCleaning, [seatNumber, theaterId]);
+    return res
+      .status(200)
+      .json({ message: 'Cleaning requested successfully.' });
   } catch (error) {
     console.error('Error requesting cleaning:', error);
     res.status(500).json({ error: 'Failed to request cleaning.' });
   }
 });
-
 
 export default router;

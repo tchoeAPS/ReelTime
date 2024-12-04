@@ -1,80 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cinema Launchpad</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #4a678e;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            position: relative;
-        }
-        .home-icon {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            font-size: 24px;
-            color: white;
-            text-decoration: none;
-        }
-        .home-icon:hover {
-            color: #F5C451;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px auto;
-            max-width: 900px;
-        }
-        .button {
-            background-color: #1a4566;
-            border: none;
-            color: white;
-            padding: 15px 30px;
-            margin: 10px;
-            text-align: center;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            width: 200px;
-            text-transform: uppercase;
-        }
-        .button:hover {
-            background-color: #285b86;
-        }
-        .button:active {
-            background-color: #133c5b;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #333;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background-color: #4a678e;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+        position: relative;
+      }
+      .home-icon {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        font-size: 24px;
+        color: white;
+        text-decoration: none;
+      }
+      .home-icon:hover {
+        color: #f5c451;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px auto;
+        max-width: 900px;
+      }
+      .button {
+        background-color: #1a4566;
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        margin: 10px;
+        text-align: center;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        width: 200px;
+        text-transform: uppercase;
+      }
+      .button:hover {
+        background-color: #285b86;
+      }
+      .button:active {
+        background-color: #133c5b;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header">
-        CINEMA LAUNCHPAD
-        <a href="reeltime.html" class="home-icon" title="Go to Homepage">
-            <i class="fas fa-home"></i>
-        </a>
+      CINEMA LAUNCHPAD
+      <a href="reeltime.html" class="home-icon" title="Go to Homepage">
+        <i class="fas fa-home"></i>
+      </a>
     </div>
     <div class="container">
-        <a href="manage_showtimes.html" class="button">Showtimes Manager</a>
-        <a href="movies_inventory.html" class="button">Movies Inventory</a>
-        <a href="theater_employee.html" class="button">Theater: Employee</a>
-        <a href="theater_manager.html" class="button">Theater: Manager</a>
-        <a href="employee_dashboard.html" class="button">Employee Dashboard</a>
+      <a href="manage_showtimes.html" class="button">Showtimes Manager</a>
+      <a href="movies_inventory.html" class="button">Movies Inventory</a>
+      <a
+        href="theater_employee.html"
+        class="button"
+        id="theaterEmployee"
+        style="display: none">
+        Theater: Employee
+      </a>
+      <a
+        href="theater_manager.html"
+        class="button"
+        id="theaterManager"
+        style="display: none">
+        Theater: Manager
+      </a>
+      <a href="employee_dashboard.html" class="button">Employee Dashboard</a>
     </div>
-</body>
+
+    <script>
+      const theaterEmployee = document.getElementById('theaterEmployee');
+      const theaterManager = document.getElementById('theaterManager');
+      const adminFlag = localStorage.getItem('adminFlag');
+      if (adminFlag === '1') {
+        theaterManager.style.display = 'block';
+      } else {
+        theaterEmployee.style.display = 'block';
+      }
+    </script>
+  </body>
 </html>

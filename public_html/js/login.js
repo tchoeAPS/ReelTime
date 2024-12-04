@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const passwordInput = document.getElementById('password');
   const signInButton = document.querySelector('button');
 
-  signInButton.addEventListener('click', (event) => {
+  signInButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
     const username = usernameInput.value.trim();
@@ -14,39 +14,39 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    fetch('http://localhost:3000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then(async (response) => {
-        // Parse the JSON response regardless of the status code
-        const data = await response.json();
-        if (response.ok) {
-          return data;
-        } else {
-          // Throw an error with the message from the server
-          throw new Error(data.message || 'Login failed');
-        }
-      })
-      .then((data) => {
-        console.log('API response data:', data);
-        if (data.message === 'Login successful') {
-            localStorage.setItem('userFullName', data.employee_fullname);
-            window.location.href = 'reeltime.html'; 
-        } else {
-            alert('Invalid username or password.');
-        }
-    })
-    
-      .catch((error) => {
-        console.error('Login error:', error);
-        alert(
-          error.message ||
-            'Login failed. Please check your username and password.'
-        );
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('API response data:', data);
+
+        if (data.message === 'Login successful') {
+          const employeeData = data.data;
+          localStorage.setItem('userFullName', employeeData.employee_fullname);
+          localStorage.setItem('adminFlag', employeeData.admin_flag);
+          localStorage.setItem('employeeCinemaId', employeeData.cinema_id);
+          localStorage.setItem('employeeCinemaName', employeeData.cinema_name);
+          window.location.href = 'reeltime.html';
+        } else {
+          alert('Invalid username or password.');
+        }
+      } else {
+        throw new Error(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(
+        error.message ||
+          'Login failed. Please check your username and password.'
+      );
+    }
   });
 });
