@@ -91,60 +91,84 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Add new employee
-  const addNewEmployee = () => {
-    const employee_fullname = document.querySelector(
-      '.modal-body input[placeholder="Employee Name"]'
-    ).value;
-    const username = document.querySelector(
-      '.modal-body input[placeholder="Employee Username"]'
-    ).value;
-    const emp_password = document.querySelector(
-      '.modal-body input[placeholder="Employee Password"]'
-    ).value;
-    const emp_email = document.querySelector(
-      '.modal-body input[placeholder="Employee Email"]'
-    ).value;
-    const admin_flag = document.querySelector(
-      '.modal-body input[placeholder="Admin Flag"]'
-    ).value;
-    const jobtitle = document.querySelector(
-      '.modal-body input[placeholder="Employee Job Title"]'
-    ).value;
-    const cinema_id = cinemaDropdown.value;
-    console.log(cinema_id);
-    if (!cinema_id) {
-      alert('Please select a Cinema ID.');
-      return;
-    }
+  const addNewEmployee = async () => {
+    try {
+      const employee_fullname = document.querySelector(
+        '.modal-body input[placeholder="Employee Name"]'
+      ).value;
+      const username = document.querySelector(
+        '.modal-body input[placeholder="Employee Username"]'
+      ).value;
+      const emp_password = document.querySelector(
+        '.modal-body input[placeholder="Employee Password"]'
+      ).value;
+      const emp_email = document.querySelector(
+        '.modal-body input[placeholder="Employee Email"]'
+      ).value;
+      const admin_flag = document.querySelector(
+        '.modal-body input[placeholder="Admin Flag"]'
+      ).value;
+      const jobtitle = document.querySelector(
+        '.modal-body input[placeholder="Employee Job Title"]'
+      ).value;
+      const cinema_id = cinemaDropdown.value;
 
-    const employeeData = {
-      employee_fullname,
-      username,
-      emp_password,
-      emp_email,
-      admin_flag,
-      jobtitle,
-      cinema_id,
-    };
+      if (!cinema_id) {
+        alert('Please select a Cinema ID.');
+        return;
+      }
 
-    fetch('http://localhost:3000/api/newEmployee', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(employeeData),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Failed to add employee');
-        return response.json();
-      })
-      .then((data) => {
-        alert('Employee added successfully!');
-        modal.style.display = 'none'; // Close the modal
-        fetchEmployees(); // Refresh employee table
-      })
-      .catch((error) => {
-        console.error('Error adding employee:', error);
-        alert('Error adding employee. Please try again.');
+      const employeeData = {
+        employee_fullname,
+        username,
+        emp_password,
+        emp_email,
+        admin_flag,
+        jobtitle,
+        cinema_id,
+      };
+
+      // Make the POST request
+      const response = await fetch('http://localhost:3000/api/newEmployee', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(employeeData),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to add employee');
+      }
+
+      const data = await response.json();
+      alert('Employee added successfully!');
+
+      // Clear the input fields
+      document.querySelector(
+        '.modal-body input[placeholder="Employee Name"]'
+      ).value = '';
+      document.querySelector(
+        '.modal-body input[placeholder="Employee Username"]'
+      ).value = '';
+      document.querySelector(
+        '.modal-body input[placeholder="Employee Password"]'
+      ).value = '';
+      document.querySelector(
+        '.modal-body input[placeholder="Employee Email"]'
+      ).value = '';
+      document.querySelector(
+        '.modal-body input[placeholder="Admin Flag"]'
+      ).value = '';
+      document.querySelector(
+        '.modal-body input[placeholder="Employee Job Title"]'
+      ).value = '';
+      cinemaDropdown.value = ''; // Reset the cinema dropdown
+
+      modal.style.display = 'none'; // Close the modal
+      fetchEmployees(); // Refresh employee table
+    } catch (error) {
+      console.error('Error adding employee:', error);
+      alert('Error adding employee. Please try again.');
+    }
   };
 
   // Event listeners
