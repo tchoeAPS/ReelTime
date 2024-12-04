@@ -182,3 +182,10 @@ SELECT
   age_group
 FROM tickets
 WHERE seat_id = ?;`;
+
+export const getReviewsByCinemaId = `
+SELECT stars, description, source_name 
+FROM reviews 
+WHERE cinema_id = ?;
+`;
+
