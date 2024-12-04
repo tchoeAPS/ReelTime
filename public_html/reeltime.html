@@ -57,6 +57,45 @@
       .movie-item p {
         font-size: 14px;
       }
+      #reviews-section {
+        margin-top: 40px; 
+        padding: 20px;
+        background-color: #34495e;
+        border-radius: 10px;
+        text-align: left; 
+}
+
+    #reviews-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 70;
+        color: #ffffff; 
+    }
+
+    .review-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #ecf0f1;
+    }
+
+    .review-item:last-child {
+        border-bottom: none;
+    }
+
+    .review-item p {
+        margin: 5px 0;
+    }
+
+    .review-item strong {
+        color: #ecf0f1; 
+    }
+
+    .review-item .stars {
+        color: #f5c451; 
+        font-size: 18px; 
+    }
+
+
     </style>
   </head>
   <body>
@@ -119,7 +158,11 @@
           <h2>Speak No Evil</h2>
           <p>Horror | R</p>
         </div>
+      </div>      
       </div>
+      <div id="reviews-section" class="content">
+        <h2>Customer Reviews</h2>
+        <div id="reviews-list"></div>
     </div>
 
     <script>
@@ -155,5 +198,38 @@
         });
       }
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const cinemaId = localStorage.getItem('employeeCinemaId');
+    
+    if (cinemaId) {
+        fetch(`http://localhost:3000/api/reviews?cinema_id=${cinemaId}`)
+            .then(response => response.json())
+            .then(data => {
+                const reviewsList = document.getElementById('reviews-list');
+                if (data.reviews && data.reviews.length > 0) {
+                    data.reviews.forEach(review => {
+                        const reviewItem = document.createElement('div');
+                        reviewItem.className = 'review-item';
+                        reviewItem.innerHTML = `
+                            <p><strong>${review.source_name}</strong>: 
+                                <span class="stars">${'★'.repeat(review.stars)}</span>
+                            </p>
+                            <p>${review.description}</p>
+                        `;
+                        reviewsList.appendChild(reviewItem);
+                    });
+                } else {
+                    reviewsList.innerHTML = '<p>No reviews available for this cinema.</p>';
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching reviews:', err);
+                document.getElementById('reviews-list').innerHTML = '<p>Error loading reviews.</p>';
+            });
+    }
+});
+    </script>
+
   </body>
 </html>
