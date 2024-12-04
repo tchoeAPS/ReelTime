@@ -16,9 +16,9 @@ CREATE TABLE cinemas (
 
 -- Insert cinemas data
 
-INSERT INTO cinemas (cinema_name, cinema_address, cinema_city, cinema_state, capacity) VALUES
-('North Haven Cinema', '123 Main St', 'North Haven', 'CT', 500),
-('New Haven Cinema', '456 Elm St', 'New Haven', 'CT', 400);
+INSERT INTO cinemas (cinema_name, cinema_id, cinema_address, cinema_city, cinema_state, capacity) VALUES
+('North Haven Cinema',1, '123 Main St', 'North Haven', 'CT', 500),
+('New Haven Cinema',2, '456 Elm St', 'New Haven', 'CT', 400);
 
 -- Table: theaters
 
