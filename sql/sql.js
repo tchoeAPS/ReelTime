@@ -189,3 +189,7 @@ FROM reviews
 WHERE cinema_id = ?;
 `;
 
+export const deleteEmployee = `
+DELETE FROM employees 
+WHERE employee_id = ?;
+`;

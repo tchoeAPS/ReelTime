@@ -46,10 +46,46 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${employee.employee_id}</td>
           <td>${employee.jobtitle}</td>
           <td>${employee.cinema_name}</td>
+          <td>
+            <button class="delete-btn" data-employee-id="${employee.employee_id}" title="Delete Employee">
+            DELETE
+            </button>
+          </td>
         `;
       employeeTable.appendChild(row);
     });
   };
+
+  employeeTable.addEventListener('click', async (event) => {
+    if (event.target.closest('.delete-btn')) {
+      const deleteButton = event.target.closest('.delete-btn');
+      const employeeId = deleteButton.getAttribute('data-employee-id');
+
+      if (!confirm('Are you sure you want to delete this employee?')) return;
+
+      try {
+        const response = await fetch(
+          'http://localhost:3000/api/deleteEmployee',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ employee_id: employeeId }),
+          }
+        );
+        console.log(response);
+        if (response.ok) {
+          const rowToDelete = deleteButton.closest('tr');
+          rowToDelete.remove();
+        } else {
+          console.error('Failed to delete employee:', response.statusText);
+          alert('Error: Could not delete employee.');
+        }
+      } catch (error) {
+        console.error('Error occurred while deleting:', error);
+        alert('Error: Could not delete employee.');
+      }
+    }
+  });
 
   // Search employees
   const searchEmployees = async (query) => {
